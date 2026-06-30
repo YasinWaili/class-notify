@@ -1,4 +1,5 @@
 import express from "express";
+import http from "node:http";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { config } from "./config.js";
@@ -84,7 +85,20 @@ app.use((error, _request, response, _next) => {
   response.status(500).json({ error: error.message || "Unexpected server error." });
 });
 
-app.listen(config.port, () => {
+const server = http.createServer(app);
+
+server.on("error", (error) => {
+  if (error.code === "EADDRINUSE") {
+    console.error(`Port ${config.port} is already in use.`);
+    console.error("Stop the other server, or start this app on another port with PowerShell:");
+    console.error("$env:PORT=3001; npm start");
+    process.exit(1);
+  }
+
+  throw error;
+});
+
+server.listen(config.port, () => {
   console.log(`Class Notify is running at http://localhost:${config.port}`);
   startMonitorLoop(config.pollIntervalSeconds);
 });

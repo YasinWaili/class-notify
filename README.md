@@ -27,6 +27,19 @@ npm run dev
 
 Open http://localhost:3000 and add the courses you want to watch.
 
+If port 3000 is already taken in PowerShell, use another port:
+
+```powershell
+$env:PORT=3001; npm start
+```
+
+Or find the process using port 3000:
+
+```powershell
+Get-NetTCPConnection -LocalPort 3000 | Select-Object LocalAddress,LocalPort,State,OwningProcess
+Get-Process -Id <OwningProcess>
+```
+
 For your current examples:
 
 - Summer 2026, `PHYS 1902`, section `V`
