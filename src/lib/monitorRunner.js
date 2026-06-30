@@ -10,6 +10,10 @@ function statusSummary(matches) {
   return matches.map((section) => `${section.section || "?"}: ${section.status}`).join(", ");
 }
 
+function monitorLabel(monitor) {
+  return `${monitor.subject} ${monitor.number}${monitor.section ? ` ${monitor.section}` : ""}`;
+}
+
 export async function checkMonitor(monitor) {
   const sections = await searchCourse({
     termCode: monitor.termCode,
@@ -42,12 +46,18 @@ export async function checkMonitor(monitor) {
 
 export async function checkAllMonitors() {
   const monitors = await readMonitors();
+  const activeMonitors = monitors.filter((item) => item.active);
   const results = [];
 
-  for (const monitor of monitors.filter((item) => item.active)) {
+  console.log(`[monitor] Checking ${activeMonitors.length} active monitor${activeMonitors.length === 1 ? "" : "s"} at ${new Date().toLocaleString()}`);
+
+  for (const monitor of activeMonitors) {
     try {
-      results.push(await checkMonitor(monitor));
+      const updated = await checkMonitor(monitor);
+      console.log(`[monitor] ${monitorLabel(updated)} -> ${updated.lastSeenStatus || "No status"}`);
+      results.push(updated);
     } catch (error) {
+      console.error(`[monitor] ${monitorLabel(monitor)} -> ${error.message}`);
       results.push(await updateMonitor(monitor.id, {
         lastCheckedAt: new Date().toISOString(),
         lastResult: {
