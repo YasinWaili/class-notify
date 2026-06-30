@@ -1,6 +1,7 @@
 import nodemailer from "nodemailer";
 import twilio from "twilio";
 import { config } from "../config.js";
+import { normalizePhoneNumber } from "./phone.js";
 
 let mailer;
 let twilioClient;
@@ -11,6 +12,23 @@ function canSendEmail() {
 
 function canSendSms() {
   return Boolean(config.twilio.accountSid && config.twilio.authToken && config.twilio.from);
+}
+
+function missingEmailSettings() {
+  return [
+    ["SMTP_HOST", config.smtp.host],
+    ["SMTP_USER", config.smtp.user],
+    ["SMTP_PASS", config.smtp.pass],
+    ["EMAIL_FROM", config.smtp.from]
+  ].filter(([, value]) => !value).map(([name]) => name);
+}
+
+function missingSmsSettings() {
+  return [
+    ["TWILIO_ACCOUNT_SID", config.twilio.accountSid],
+    ["TWILIO_AUTH_TOKEN", config.twilio.authToken],
+    ["TWILIO_FROM", config.twilio.from]
+  ].filter(([, value]) => !value).map(([name]) => name);
 }
 
 function getMailer() {
@@ -56,7 +74,7 @@ function buildMessage(monitor, section) {
 
 export async function notifyOpenSection(monitor, section) {
   const emailTo = monitor.notifyEmail || config.defaultNotifyEmail;
-  const phoneTo = monitor.notifyPhone || config.defaultNotifyPhone;
+  const phoneTo = normalizePhoneNumber(monitor.notifyPhone || config.defaultNotifyPhone);
   const message = buildMessage(monitor, section);
   const deliveries = [];
 
@@ -69,19 +87,19 @@ export async function notifyOpenSection(monitor, section) {
     });
     deliveries.push(`email:${emailTo}`);
   } else if (emailTo) {
-    console.log(`[notify] Email not configured. Would send to ${emailTo}:\n${message.text}`);
+    console.log(`[notify] Email not configured. Missing ${missingEmailSettings().join(", ")}. Would send to ${emailTo}:\n${message.text}`);
     deliveries.push(`email-log:${emailTo}`);
   }
 
   if (phoneTo && canSendSms()) {
     await getTwilioClient().messages.create({
-      from: config.twilio.from,
+      from: normalizePhoneNumber(config.twilio.from),
       to: phoneTo,
       body: message.text
     });
     deliveries.push(`sms:${phoneTo}`);
   } else if (phoneTo) {
-    console.log(`[notify] SMS not configured. Would send to ${phoneTo}:\n${message.text}`);
+    console.log(`[notify] SMS not configured. Missing ${missingSmsSettings().join(", ")}. Would send to ${phoneTo}:\n${message.text}`);
     deliveries.push(`sms-log:${phoneTo}`);
   }
 

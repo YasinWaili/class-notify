@@ -49,6 +49,16 @@ For your current examples:
 
 Email uses SMTP settings from `.env`. SMS uses Twilio settings from `.env`.
 
+For SMS, set all three Twilio values:
+
+```env
+TWILIO_ACCOUNT_SID=your-account-sid
+TWILIO_AUTH_TOKEN=your-auth-token
+TWILIO_FROM=+15551234567
+```
+
+Phone numbers should be in `+countrycode` format. For Canada/US, `18732880566` is normalized to `+18732880566`.
+
 If notification credentials are missing, the app logs the message it would have sent instead. That makes it possible to test course monitoring before wiring up secrets.
 
 ## Commands

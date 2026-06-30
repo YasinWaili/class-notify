@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { parseCourseResults } from "../src/lib/carletonClient.js";
+import { normalizePhoneNumber } from "../src/lib/phone.js";
 
 test("parseCourseResults extracts sections and open status", () => {
   const html = `
@@ -43,4 +44,11 @@ test("parseCourseResults extracts sections and open status", () => {
   assert.equal(results[1].status, "Waitlist Open");
   assert.equal(results[1].isOpen, true);
   assert.equal(results[1].section, "R");
+});
+
+test("normalizePhoneNumber formats common North American numbers for Twilio", () => {
+  assert.equal(normalizePhoneNumber("18732880566"), "+18732880566");
+  assert.equal(normalizePhoneNumber("873-288-0566"), "+18732880566");
+  assert.equal(normalizePhoneNumber("+1 (873) 288-0566"), "+18732880566");
+  assert.equal(normalizePhoneNumber(""), "");
 });

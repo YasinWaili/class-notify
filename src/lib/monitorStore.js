@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
 import { fileURLToPath } from "node:url";
+import { normalizePhoneNumber } from "./phone.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DATA_DIR = path.resolve(__dirname, "../../data");
@@ -39,7 +40,7 @@ export async function addMonitor(input) {
     number: String(input.number || "").trim(),
     section: String(input.section || "").trim().toUpperCase(),
     notifyEmail: String(input.notifyEmail || "").trim(),
-    notifyPhone: String(input.notifyPhone || "").trim(),
+    notifyPhone: normalizePhoneNumber(input.notifyPhone),
     active: true,
     createdAt: now,
     updatedAt: now,
