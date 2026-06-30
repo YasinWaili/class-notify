@@ -63,6 +63,10 @@ function statusClass(monitor) {
   return "";
 }
 
+function contactValue(value, fallback) {
+  return value ? escapeHtml(value) : `<span class="muted">${fallback}</span>`;
+}
+
 function renderMonitors(monitors) {
   if (monitors.length === 0) {
     monitorsEl.innerHTML = '<div class="empty">No courses are being watched yet.</div>';
@@ -76,6 +80,8 @@ function renderMonitors(monitors) {
     const title = monitor.lastResult?.matches?.find((match) => match.title)?.title || "";
     const deliveries = monitor.lastResult?.deliveries?.length ? `Sent: ${escapeHtml(monitor.lastResult.deliveries.join(", "))}` : "";
     const error = monitor.lastResult?.error ? `Error: ${escapeHtml(monitor.lastResult.error)}` : "";
+    const email = contactValue(monitor.notifyEmail, "default email");
+    const phone = contactValue(monitor.notifyPhone, "default phone");
 
     return `
       <article class="monitor">
@@ -85,6 +91,10 @@ function renderMonitors(monitors) {
             <span class="badge ${badgeClass}">${status}</span>
           </div>
           ${title ? `<p class="title">${escapeHtml(title)}</p>` : ""}
+          <div class="contacts" aria-label="Notification contacts">
+            <span>Email: ${email}</span>
+            <span>SMS: ${phone}</span>
+          </div>
           <p class="meta">${escapeHtml(monitor.termLabel || monitor.termCode)}<br>Last checked: ${formatDate(monitor.lastCheckedAt)}${deliveries ? `<br>${deliveries}` : ""}${error ? `<br>${error}` : ""}</p>
         </div>
         <div class="actions">

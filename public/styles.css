@@ -226,6 +226,25 @@ button:focus {
   line-height: 1.35;
 }
 
+.contacts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 9px;
+  color: var(--muted);
+  font-size: 0.84rem;
+  line-height: 1.35;
+}
+
+.contacts span {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.muted {
+  color: #858585;
+}
+
 .meta {
   margin-top: 7px;
   color: var(--muted);
