@@ -218,6 +218,14 @@ button:focus {
   color: var(--closed);
 }
 
+.title {
+  margin-top: 8px;
+  color: var(--ink);
+  font-size: 0.98rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
 .meta {
   margin-top: 7px;
   color: var(--muted);

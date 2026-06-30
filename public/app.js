@@ -73,6 +73,7 @@ function renderMonitors(monitors) {
     const section = monitor.section ? ` ${escapeHtml(monitor.section)}` : "";
     const status = escapeHtml(monitor.lastSeenStatus || "Pending");
     const badgeClass = statusClass(monitor);
+    const title = monitor.lastResult?.matches?.find((match) => match.title)?.title || "";
     const deliveries = monitor.lastResult?.deliveries?.length ? `Sent: ${escapeHtml(monitor.lastResult.deliveries.join(", "))}` : "";
     const error = monitor.lastResult?.error ? `Error: ${escapeHtml(monitor.lastResult.error)}` : "";
 
@@ -83,6 +84,7 @@ function renderMonitors(monitors) {
             <span>${escapeHtml(monitor.subject)} ${escapeHtml(monitor.number)}${section}</span>
             <span class="badge ${badgeClass}">${status}</span>
           </div>
+          ${title ? `<p class="title">${escapeHtml(title)}</p>` : ""}
           <p class="meta">${escapeHtml(monitor.termLabel || monitor.termCode)}<br>Last checked: ${formatDate(monitor.lastCheckedAt)}${deliveries ? `<br>${deliveries}` : ""}${error ? `<br>${error}` : ""}</p>
         </div>
         <div class="actions">
