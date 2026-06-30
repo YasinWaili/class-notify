@@ -191,6 +191,11 @@ button:focus {
   padding: 14px;
 }
 
+.monitor.available {
+  border-color: #89d6ad;
+  background: #fbfffc;
+}
+
 .course {
   display: flex;
   align-items: center;
@@ -229,20 +234,43 @@ button:focus {
 .contacts {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
   margin-top: 9px;
   color: var(--muted);
   font-size: 0.84rem;
   line-height: 1.35;
 }
 
-.contacts span {
+.contact-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  max-width: 100%;
+  border: 1px solid #e5e5e5;
+  border-radius: 999px;
+  background: #fafafa;
+  padding: 4px 8px;
+  overflow-wrap: anywhere;
+}
+
+.contact-pill span {
   max-width: 100%;
   overflow-wrap: anywhere;
 }
 
+.contact-pill b {
+  color: var(--ink);
+}
+
 .muted {
   color: #858585;
+}
+
+.open-note {
+  margin-top: 9px;
+  color: var(--open);
+  font-size: 0.88rem;
+  font-weight: 800;
 }
 
 .meta {

@@ -29,6 +29,15 @@ export async function writeMonitors(monitors) {
   await fs.writeFile(STORE_PATH, `${JSON.stringify(monitors, null, 2)}\n`, "utf8");
 }
 
+function monitorKey(monitor) {
+  return [
+    String(monitor.termCode || "").trim(),
+    String(monitor.subject || "").trim().toUpperCase(),
+    String(monitor.number || "").trim(),
+    String(monitor.section || "").trim().toUpperCase()
+  ].join("|");
+}
+
 export async function addMonitor(input) {
   const monitors = await readMonitors();
   const now = new Date().toISOString();
@@ -52,6 +61,12 @@ export async function addMonitor(input) {
 
   if (!monitor.termCode || !monitor.subject || !monitor.number) {
     throw new Error("Term, subject, and course number are required.");
+  }
+
+  if (monitors.some((item) => monitorKey(item) === monitorKey(monitor))) {
+    const error = new Error("This course and section is already being watched.");
+    error.statusCode = 409;
+    throw error;
   }
 
   monitors.push(monitor);

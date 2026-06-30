@@ -13,6 +13,12 @@ const app = express();
 app.use(express.json());
 app.use(express.static(path.resolve(__dirname, "../public")));
 
+app.get("/api/config", (_request, response) => {
+  response.json({
+    pollIntervalSeconds: config.pollIntervalSeconds
+  });
+});
+
 app.get("/api/terms", async (_request, response, next) => {
   try {
     response.json(await fetchTerms());
@@ -82,7 +88,7 @@ app.post("/api/probe", async (request, response, next) => {
 
 app.use((error, _request, response, _next) => {
   console.error(error);
-  response.status(500).json({ error: error.message || "Unexpected server error." });
+  response.status(error.statusCode || 500).json({ error: error.message || "Unexpected server error." });
 });
 
 const server = http.createServer(app);
