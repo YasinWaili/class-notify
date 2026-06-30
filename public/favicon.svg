@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Class Notify">
-  <rect width="64" height="64" rx="14" fill="#b00020"/>
-  <path d="M19 20h17a10 10 0 0 1 0 20H26v6h-7V20Z" fill="#fff"/>
-  <path d="M26 27v6h9a3 3 0 0 0 0-6h-9Z" fill="#b00020"/>
-  <path d="M40 24h6l7 12V24h6v22h-6l-7-12v12h-6V24Z" fill="#fff"/>
-  <circle cx="48" cy="16" r="8" fill="#f7c948"/>
-  <circle cx="48" cy="16" r="3" fill="#171717"/>
-</svg>
