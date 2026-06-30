@@ -1,0 +1,28 @@
+{
+  "name": "class-notify",
+  "version": "0.1.0",
+  "description": "Monitor Carleton public class schedule sections and notify when seats or waitlists open.",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "check": "node src/cli/check-now.js",
+    "test": "node --test"
+  },
+  "keywords": [
+    "carleton",
+    "course",
+    "registration",
+    "notification"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "cheerio": "^1.0.0",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "nodemailer": "^9.0.1",
+    "twilio": "^5.4.0"
+  }
+}
